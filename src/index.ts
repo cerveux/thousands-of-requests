@@ -1,7 +1,8 @@
 import express, { Application } from "express";
 import { config } from "./config/config";
 import redisClient from "./config/redis";
-
+import messageRoutes from "./routes/message.routes";
+import { errorHandler } from "./middlewares/handlers.middleware";
 
 
 const PORT: number = config.port;
@@ -21,6 +22,11 @@ if ( config.nodeEnv !== "test" ) {
   const app: Application = express();
 
   app.use( express.json() );
+
+  app.use( "/api/message", messageRoutes );
+
+  app.use( "*", errorHandler );
+
 
 
   app.listen( PORT, () => {
