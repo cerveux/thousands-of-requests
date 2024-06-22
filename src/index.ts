@@ -1,9 +1,7 @@
-import express, { Application } from "express";
+import http from "http";
+import app from "./server";
 import { config } from "./config/config";
 import redisClient from "./config/redis";
-import messageRoutes from "./routes/message.routes";
-import { errorHandler } from "./middlewares/handlers.middleware";
-
 
 const PORT: number = config.port;
 
@@ -19,17 +17,9 @@ if ( config.nodeEnv !== "test" ) {
     } );
 
   // Create Server
-  const app: Application = express();
+  const server = http.createServer( app );
 
-  app.use( express.json() );
-
-  app.use( "/api/message", messageRoutes );
-
-  app.use( "*", errorHandler );
-
-
-
-  app.listen( PORT, () => {
+  server.listen( PORT, () => {
     console.log( `Server is running on port ${PORT}` );
   } );
 }
