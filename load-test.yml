@@ -1,0 +1,14 @@
+config:
+  target: "http://localhost:3000" # Replace with your API base URL
+  phases:
+  - duration: 60
+    arrivalRate: 250
+    name: Warm up the API
+
+scenarios:
+  - flow:
+      - post:
+          url: "/api/message"
+          json:
+            user_name: "cer"
+            user_message: "veux"

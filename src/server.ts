@@ -1,30 +1,24 @@
 import express, { Application } from "express";
+import cors from "cors";
+import morgan from "morgan";
+
 import { config } from "./config/config";
-import swaggerDocs from "./config/swagger.ts";
 import { errorHandler } from "./middlewares/handlers.middleware";
-// import cors from "cors";
-// import morgan from "morgan";
-import {
-  ArticleRoute,
-} from "./routes";
-
-
+import messageRoutes from "./routes/message.routes";
 
 
 const app: Application = express();
 
-// Swagger documentation
-( config.nodeEnv !== "test" ) && swaggerDocs( app, config.port );
-
 // Middlewares
 app.use( express.json() );
+app.use( cors() );
 
-// ( config.nodeEnv !== "test" ) && app.use( morgan( "short" ) );
-
-
+( config.nodeEnv !== "test" ) && app.use( morgan( "short" ) );
 
 // Routes
-app.use( "/api/article", ArticleRoute );
+app.use( "/api/message", messageRoutes );
+
+app.all( "*", ( req, res ) => res.status( 404 ).json( { message: "This route doesn't exists." } ) );
 
 app.use( "*", errorHandler );
 
